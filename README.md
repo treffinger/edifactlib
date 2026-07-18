@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="media/logo.png" width="250">
+    <img src="https://raw.githubusercontent.com/treffinger/edifactlib/refs/heads/main/media/logo.png" width="250">
 </p>
 
 # edifactlib
