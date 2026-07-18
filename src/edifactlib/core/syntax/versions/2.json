@@ -1,0 +1,675 @@
+{
+    "EDSD": [
+        {
+            "tag": "UNB",
+            "name": "Interchange header",
+            "data_elements": [
+                {
+                    "tag": "S001",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S002",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S003",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S004",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0020",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S005",
+                    "type": "EDCD",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0026",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0029",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0031",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0032",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0035",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNZ",
+            "name": "Interchange Trailer",
+            "data_elements": [
+                {
+                    "tag": "0036",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0020",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNG",
+            "name": "Functional Group Header",
+            "data_elements": [
+                {
+                    "tag": "0038",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S006",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S007",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S004",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0048",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0051",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S008",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0058",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNE",
+            "name": "Functional Group Trailer",
+            "data_elements": [
+                {
+                    "tag": "0060",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0048",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNH",
+            "name": "Message Header",
+            "data_elements": [
+                {
+                    "tag": "0062",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S009",
+                    "type": "EDCD",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0068",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "S010",
+                    "type": "EDCD",
+                    "required": false,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNT",
+            "name": "Message Trailer",
+            "data_elements": [
+                {
+                    "tag": "0074",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0062",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "TXT",
+            "name": "Text",
+            "data_elements": [
+                {
+                    "tag": "0077",
+                    "type": "EDED",
+                    "required": false,
+                    "max_repeat": 1
+                },
+                {
+                    "tag": "0078",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                }
+            ]
+        },
+        {
+            "tag": "UNS",
+            "name": "Section Control",
+            "data_elements": [
+                {
+                    "tag": "0081",
+                    "type": "EDED",
+                    "required": true,
+                    "max_repeat": 1
+                }
+            ]
+        }
+    ],
+    "EDCD": [
+        {
+            "tag": "S001",
+            "name": "Syntax identifier",
+            "components": [
+                {
+                    "tag": "0001",
+                    "required": true
+                },
+                {
+                    "tag": "0002",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "tag": "S002",
+            "name": "Interchange sender",
+            "components": [
+                {
+                    "tag": "0004",
+                    "required": true
+                },
+                {
+                    "tag": "0007",
+                    "required": false
+                },
+                {
+                    "tag": "0008",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S003",
+            "name": "Interchange recipient",
+            "components": [
+                {
+                    "tag": "0010",
+                    "required": true
+                },
+                {
+                    "tag": "0007",
+                    "required": false
+                },
+                {
+                    "tag": "0014",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S004",
+            "name": "Date/Time of preparation",
+            "components": [
+                {
+                    "tag": "0017",
+                    "required": true
+                },
+                {
+                    "tag": "0019",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "tag": "S005",
+            "name": "Recipients reference",
+            "components": [
+                {
+                    "tag": "0020",
+                    "required": true
+                },
+                {
+                    "tag": "0025",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S006",
+            "name": "Application sender's identification",
+            "components": [
+                {
+                    "tag": "0040",
+                    "required": true
+                },
+                {
+                    "tag": "0007",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S007",
+            "name": "Application recipients identification",
+            "components": [
+                {
+                    "tag": "0044",
+                    "required": true
+                },
+                {
+                    "tag": "0007",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S008",
+            "name": "Message version",
+            "components": [
+                {
+                    "tag": "0052",
+                    "required": true
+                },
+                {
+                    "tag": "0054",
+                    "required": true
+                },
+                {
+                    "tag": "0057",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S009",
+            "name": "Message identifier",
+            "components": [
+                {
+                    "tag": "0065",
+                    "required": true
+                },
+                {
+                    "tag": "0052",
+                    "required": true
+                },
+                {
+                    "tag": "0054",
+                    "required": true
+                },
+                {
+                    "tag": "0051",
+                    "required": true
+                },
+                {
+                    "tag": "0057",
+                    "required": false
+                },
+                {
+                    "tag": "0068",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "tag": "S010",
+            "name": "Status of the transfer",
+            "components": [
+                {
+                    "tag": "0070",
+                    "required": true
+                },
+                {
+                    "tag": "0073",
+                    "required": false
+                }
+            ]
+        }
+    ],
+    "EDED": [
+        {
+            "tag": "0001",
+            "name": "Syntax identifier",
+            "charset": "a",
+            "min_length": 4,
+            "max_length": 4
+        },
+        {
+            "tag": "0002",
+            "name": "Syntax version number",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 1
+        },
+        {
+            "tag": "0004",
+            "name": "Sender identification",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0007",
+            "name": "Partner identification code qualifier",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 4
+        },
+        {
+            "tag": "0008",
+            "name": "Address for reverse routing",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0010",
+            "name": "Recipient Identification",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0014",
+            "name": "Routing address",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0017",
+            "name": "Date",
+            "charset": "n",
+            "min_length": 6,
+            "max_length": 6
+        },
+        {
+            "tag": "0019",
+            "name": "Time",
+            "charset": "n",
+            "min_length": 4,
+            "max_length": 4
+        },
+        {
+            "tag": "0020",
+            "name": "Interchange control",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0022",
+            "name": "Recipient's reference/  As specified in IA. password",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0025",
+            "name": "Recipient's reference/  If specified in IA password qualifier",
+            "charset": "an",
+            "min_length": 2,
+            "max_length": 2
+        },
+        {
+            "tag": "0026",
+            "name": "Application reference",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0029",
+            "name": "Processing priority code",
+            "charset": "a",
+            "min_length": 1,
+            "max_length": 1
+        },
+        {
+            "tag": "0031",
+            "name": "Acknowledgement request",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 1
+        },
+        {
+            "tag": "0032",
+            "name": "Communications agreement",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0035",
+            "name": "Test indicator",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 1
+        },
+        {
+            "tag": "0036",
+            "name": "Interchange control count",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0038",
+            "name": "Functional group identification",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0040",
+            "name": "Application sender's identification",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0044",
+            "name": "Recipient's identification",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0048",
+            "name": "Functional group reference number",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0051",
+            "name": "Controlling agency",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 2
+        },
+        {
+            "tag": "0052",
+            "name": "Message version number",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 3
+        },
+        {
+            "tag": "0054",
+            "name": "Message release number",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 3
+        },
+        {
+            "tag": "0057",
+            "name": "Association assigned Code",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0058",
+            "name": "Application password",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0060",
+            "name": "Number of messages",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0062",
+            "name": "Message reference number",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 14
+        },
+        {
+            "tag": "0065",
+            "name": "Message type",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0068",
+            "name": "Common access reference",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 35
+        },
+        {
+            "tag": "0070",
+            "name": "Sequence of transfers",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 2
+        },
+        {
+            "tag": "0073",
+            "name": "First and last transfer",
+            "charset": "a",
+            "min_length": 1,
+            "max_length": 1
+        },
+        {
+            "tag": "0074",
+            "name": "Number of segments in the message",
+            "charset": "n",
+            "min_length": 1,
+            "max_length": 6
+        },
+        {
+            "tag": "0077",
+            "name": "Text reference code",
+            "charset": "an",
+            "min_length": 3,
+            "max_length": 3
+        },
+        {
+            "tag": "0078",
+            "name": "Free form text",
+            "charset": "an",
+            "min_length": 1,
+            "max_length": 70
+        },
+        {
+            "tag": "0081",
+            "name": "Section identification",
+            "charset": "a",
+            "min_length": 1,
+            "max_length": 1
+        }
+    ]
+}

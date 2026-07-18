@@ -1,0 +1,2 @@
+class EdifactError(Exception):
+    pass

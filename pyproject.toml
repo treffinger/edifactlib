@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "edifactlib"
+version = "0.1.0"
+readme = "README.md"
+dependencies = [
+  "pydantic",
+  "typer",
+  "rich"
+]
+requires-python = ">=3.12"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/edifactlib"]
+
+[project.scripts]
+edifact = "edifactlib.cli.main:app"
