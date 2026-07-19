@@ -80,8 +80,15 @@ edifact /path/to/message.edi --print-json
 Currently version 2 and 3 are supported. An implementation for version 4 is planned.
 
 ### Directories
+The following directories are currently supported:
+- `D.24A`
+- `D.23A`
+- `D.22B`
+- `D.22A`
+- `D.21B`
+- `D.21A`
 
-Currently, the `D.24A` directory is supported. Older directories will follow.
+Older directories will follow.
 
 ## Transparency regarding AI-generated content
 

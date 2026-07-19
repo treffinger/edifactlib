@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edifactlib"
-version = "0.1.0"
+version = "0.2.0"
 readme = "README.md"
 dependencies = [
   "pydantic",
@@ -12,6 +12,9 @@ dependencies = [
   "rich"
 ]
 requires-python = ">=3.12"
+
+[project.urls]
+source = "https://github.com/treffinger/edifactlib"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/edifactlib"]
