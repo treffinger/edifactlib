@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.tree import Tree
-from typer import Argument, BadParameter, Exit, Option, echo
+from typer import Argument, BadParameter, Context, Exit, Option, echo
 
 from ..core import Parser
 from ..core.exceptions import EdifactError
@@ -15,11 +15,15 @@ from ..core.resolver import InterchangeResolver
 
 
 def run(
+    ctx: Context,
     path: Annotated[str | None, Argument(help="EDIFACT message file path")] = None,
     from_string: Annotated[str | None, Option(help="EDIFACT message as String")] = None,
     print_json: Annotated[bool, Option(help="Prints the interchange as JSON")] = False,
 ) -> None:
-    if path is not None and from_string is not None:
+    if not path and not from_string:
+        echo(ctx.get_help())
+        raise Exit()
+    elif path is not None and from_string is not None:
         raise BadParameter('Use either "edifact /path/to/file.txt" or "edifact --from-string \'...\'".')
 
     interchange: Interchange | None = None
