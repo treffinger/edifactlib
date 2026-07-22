@@ -20,6 +20,11 @@ def run(
     from_string: Annotated[str | None, Option(help="EDIFACT message as String")] = None,
     print_json: Annotated[bool, Option(help="Prints the interchange as JSON")] = False,
 ) -> None:
+    """
+    The edifact tool loads, validates, and displays UN/EDIFACT interchanges on the console.
+
+    Provide the interchange either as a file by entering its path or inline via --from-string.
+    """
     if not path and not from_string:
         echo(ctx.get_help())
         raise Exit()
