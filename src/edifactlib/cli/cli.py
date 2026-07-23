@@ -14,7 +14,9 @@ def run(
     path: Annotated[str | None, Argument(help="EDIFACT message file path")] = None,
     from_string: Annotated[str | None, Option(help="EDIFACT message as String")] = None,
     print_json: Annotated[bool, Option(help="Prints the interchange as JSON")] = False,
-    version: Annotated[bool, Option(callback=print_version, is_eager=True)] = False,
+    version: Annotated[
+        bool, Option(callback=print_version, is_eager=True, help="Displays the version of edifactlib")
+    ] = False,
 ) -> None:
     """
     The edifact tool loads, validates, and displays UN/EDIFACT interchanges on the console.
