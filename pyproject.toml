@@ -4,7 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edifactlib"
-version = "0.2.0"
+version = "0.3.0"
+description = "A Python library and CLI tool for parsing, validating, and displaying UN/EDIFACT interchanges."
+license = "AGPL-3.0-only"
 readme = "README.md"
 dependencies = [
   "pydantic",
