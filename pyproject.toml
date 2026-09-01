@@ -15,6 +15,13 @@ dependencies = [
 ]
 requires-python = ">=3.12"
 
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "black",
+  "isort"
+]
+
 [project.urls]
 source = "https://github.com/treffinger/edifactlib"
 
@@ -23,3 +30,10 @@ packages = ["src/edifactlib"]
 
 [project.scripts]
 edifact = "edifactlib.cli.main:app"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
