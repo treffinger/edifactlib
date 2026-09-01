@@ -63,7 +63,7 @@ edifact --from-string "UNA:+.? 'UNB+UNOC:3+...'"
 
 The interchange header, contained messages, and functional groups are printed to the console in a formatted view:
 
-![CLI output as a formatted tree](media/cli01.png)
+![CLI output as a formatted tree](https://raw.githubusercontent.com/treffinger/edifactlib/refs/heads/main/media/cli01.png)
 
 Pass `--print-json` to print the parsed interchange as JSON instead, e.g. for piping into other tools:
 
@@ -71,7 +71,7 @@ Pass `--print-json` to print the parsed interchange as JSON instead, e.g. for pi
 edifact /path/to/message.edi --print-json
 ```
 
-![CLI output as JSON](media/cli02.png)
+![CLI output as JSON](https://raw.githubusercontent.com/treffinger/edifactlib/refs/heads/main/media/cli02.png)
 
 ## Supported EDIFACT versions and directories
 
