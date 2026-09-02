@@ -37,6 +37,14 @@ def test_segment_count_mismatch_raises(validator, parsed):
         validator.validate(message, "3", parsed.header, parsed.una)
 
 
+def test_missing_segment_count_raises(validator, parsed):
+    message = parsed.messages[0]
+    message.trailer.data_elements[0].components[0].content = ""
+
+    with pytest.raises(MessageValidationError):
+        validator.validate(message, "3", parsed.header, parsed.una)
+
+
 def test_reference_number_mismatch_raises(validator, parsed):
     message = parsed.messages[0]
     message.trailer.data_elements[1].components[0].content = "999"

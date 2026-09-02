@@ -24,7 +24,7 @@ class MessageValidator:
     def _validate_segment_count(self, message: Message) -> None:
         number_segments = message.trailer.data_elements[0].components[0].content
         if not number_segments:
-            raise ValueError("The message could not be validated. Invalid message trailer.")
+            raise MessageValidationError("The message could not be validated. Invalid message trailer.")
 
         try:
             number_segments = int(number_segments)
