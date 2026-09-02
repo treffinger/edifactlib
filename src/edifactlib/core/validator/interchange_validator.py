@@ -15,6 +15,30 @@ class InterchangeValidator:
         self._segment_validator = SegmentValidator(syntax, directory)
 
     def validate(self, interchange: Interchange) -> None:
+        """Validate a complete interchange.
+
+        Determines the syntax version from the header, validates the header
+        and trailer, the basic structure (messages vs. functional groups),
+        the charset level, and all contained messages (either directly in
+        the interchange or inside functional groups).
+
+        Args:
+            interchange: The interchange to validate.
+
+        Raises:
+            InterchangeValidationError: If the header or trailer does not
+                have the expected tag (UNB/UNZ), violates its definition, the
+                control reference of header and trailer does not match,
+                neither messages nor functional groups are present, both
+                messages and functional groups are present at the same time,
+                the syntax version cannot be read, or the specified charset
+                level is not allowed for the version.
+            MessageValidationError: If a contained message is invalid.
+            SegmentValidationError: If a segment inside the header, trailer,
+                or a message cannot be found or violates its definition.
+            DataElementValidationError: If a data element or component
+                inside the header, trailer, or a message is invalid.
+        """
         version = self._get_version(interchange.header)
         self._validate_interchange_header(interchange.header, version, interchange.una)
         self._validate_interchange_trailer(interchange.trailer, version, interchange.header, interchange.una)

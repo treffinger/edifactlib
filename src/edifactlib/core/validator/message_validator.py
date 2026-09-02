@@ -10,6 +10,32 @@ class MessageValidator:
         self._segment_validator = SegmentValidator(syntax, directory)
 
     def validate(self, message: Message, version: str, header: Segment, una_seg: Segment | None) -> None:
+        """Validate a single message.
+
+        Checks the segment count stated in the trailer against the actual
+        count, as well as the reference number matching between the header
+        and trailer. Then validates all segments of the message, where UNS
+        and TXT are validated generically (without a directory), since they
+        are not part of the message-specific definition.
+
+        Args:
+            message: The message to validate.
+            version: The syntax version of the message.
+            header: The interchange header segment (UNB), passed through to
+                subordinate validators for charset validation.
+            una_seg: The UNA segment of the message, if present, otherwise
+                None.
+
+        Raises:
+            MessageValidationError: If the trailer does not contain a segment
+                count, the segment count is not numeric, does not match the
+                actual number of segments, or the reference number of header
+                and trailer does not match.
+            SegmentValidationError: If a segment of the message cannot be
+                found or violates its definition.
+            DataElementValidationError: If a data element or component of a
+                segment of the message is invalid.
+        """
         self._validate_segment_count(message)
         self._validate_reference_number(message.header, message.trailer)
 

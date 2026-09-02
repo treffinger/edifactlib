@@ -15,6 +15,32 @@ class SegmentValidator:
     def validate(
         self, segment: Segment, version: str, dir_name: str | None, header: Segment, una_seg: Segment | None
     ) -> None:
+        """Validate a segment against its segment definition.
+
+        Looks up the segment definition from the syntax or the directory and,
+        for each expected data element position, checks whether required
+        elements are present and the maximum repeat count is respected, then
+        delegates the content validation of each occurrence found to the
+        DataElementValidator.
+
+        Args:
+            segment: The segment to validate.
+            version: The syntax version of the message.
+            dir_name: Name of the message directory, if validation should be
+                directory-specific, otherwise None for the generic syntax.
+            header: The interchange header segment (UNB), passed through to
+                the DataElementValidator for charset validation.
+            una_seg: The UNA segment of the message, if present, otherwise
+                None.
+
+        Raises:
+            SegmentValidationError: If the segment definition for the tag
+                cannot be found, a required data element is missing, a data
+                element occurs more often than allowed, or a required data
+                element is present but its content is empty.
+            DataElementValidationError: If a data element or component
+                violates its definition.
+        """
         seg_def = self._get_segment_def(segment.tag, dir_name, version)
         by_position: dict[int, list[DataElement]] = {}
 

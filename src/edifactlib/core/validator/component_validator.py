@@ -8,6 +8,29 @@ from .charset import LEVEL_ALPHA_FRAGMENTS, LEVEL_FULL_FRAGMENTS
 
 class ComponentValidator:
     def validate(self, component: Component, element_def: ElementDef, header: Segment, una_seg: Segment | None) -> None:
+        """Validate the content of a single component against its element definition.
+
+        Checks the length of the content and, depending on the charset
+        specified in the element definition (alphabetic, numeric, or
+        alphanumeric), whether it contains only allowed characters. For
+        numeric values, the decimal separator defined in the UNA segment is
+        taken into account. If the content is empty, validation is skipped.
+
+        Args:
+            component: The component to validate.
+            element_def: The element definition with length and charset
+                constraints.
+            header: The interchange header segment (UNB) from which the
+                charset level is read.
+            una_seg: The UNA segment of the message, if present, used to
+                determine the decimal separator; otherwise None (default ".").
+
+        Raises:
+            DataElementValidationError: If the content's length is outside
+                the allowed min/max length, the UNA segment is invalid (too
+                short), the charset level is unknown, or the content contains
+                characters not allowed for the defined charset.
+        """
         if not component.content:
             return
 

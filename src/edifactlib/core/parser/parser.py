@@ -15,6 +15,34 @@ class Parser:
         }
 
     def parse(self, edifact_msg: str, validate: bool = True) -> Interchange:
+        """Parse an EDIFACT message and turn it into an Interchange object.
+
+        First determines the syntax version from the separators and the UNB
+        segment and selects the matching parser accordingly. Optionally
+        validates the resulting interchange afterwards.
+
+        Args:
+            edifact_msg: The raw EDIFACT message to parse.
+            validate: If True (default), the parsed interchange is also
+                validated after parsing.
+
+        Returns:
+            The parsed Interchange object.
+
+        Raises:
+            ParsingError: If the syntax version cannot be determined, an
+                unsupported version is present, the UNA segment is invalid,
+                or the message cannot otherwise be parsed.
+            InterchangeValidationError: If validate=True and the interchange
+                header/trailer or the interchange structure is invalid.
+            MessageValidationError: If validate=True and a contained message
+                is invalid (e.g. wrong segment count or reference number).
+            SegmentValidationError: If validate=True and a segment cannot be
+                found in the directory/syntax or violates its definition.
+            DataElementValidationError: If validate=True and a data element
+                or component is invalid (length, charset, missing required
+                value, etc.).
+        """
         version = self._get_version(edifact_msg)
         parser = self._parsers.get(version)
 

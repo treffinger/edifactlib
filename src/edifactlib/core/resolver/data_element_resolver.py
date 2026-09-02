@@ -12,6 +12,26 @@ class DataElementResolver:
     def resolve(
         self, data_element: DataElement, data_element_ref: DataElementRef, version: str, dir_name: str | None
     ) -> None:
+        """Resolve the name of a data element (and its components, if any).
+
+        Depending on the reference type (EDED = simple element, otherwise
+        EDCD = composite element), looks up the element definition from the
+        syntax or the directory and fills the resolved names into
+        `data_element`. If no definition is found, the data element is left
+        unchanged.
+
+        Args:
+            data_element: The data element to populate.
+            data_element_ref: The reference definition from the segment
+                definition.
+            version: The syntax version of the message.
+            dir_name: Name of the message directory if resolution should be
+                directory-specific, otherwise None for the generic syntax.
+
+        Raises:
+            Does not raise any exception itself. Definitions that cannot be
+            found are silently skipped; no name is set in that case.
+        """
         if data_element_ref.type == "EDED":
             self._resolve_eded(data_element, data_element_ref, version, dir_name)
         else:

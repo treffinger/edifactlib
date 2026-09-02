@@ -14,6 +14,20 @@ class InterchangeResolver:
         self._segment_resolver = SegmentResolver(syntax, directory)
 
     def resolve(self, interchange: Interchange) -> None:
+        """Resolve the names of all segments/data elements of an interchange.
+
+        First determines the syntax version from the interchange header, then
+        resolves the header, the trailer, and all messages (either directly
+        in the interchange or inside functional groups).
+
+        Args:
+            interchange: The interchange whose segments/data elements should
+                be enriched with human-readable names.
+
+        Raises:
+            EdifactError: If the syntax version cannot be read from the
+                interchange header.
+        """
         version = self._get_version(interchange.header)
         self._segment_resolver.resolve(interchange.header, version, None)
         self._segment_resolver.resolve(interchange.trailer, version, None)

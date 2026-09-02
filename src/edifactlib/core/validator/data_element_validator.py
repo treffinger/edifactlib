@@ -21,6 +21,35 @@ class DataElementValidator:
         header: Segment,
         una_seg: Segment | None,
     ) -> None:
+        """Validate a data element against its reference definition.
+
+        If the data element is not required and empty, validation is
+        skipped. Otherwise, depending on the type (EDED = simple element,
+        otherwise EDCD = composite element), delegates to the corresponding
+        routine, which looks up the element definition(s) from the syntax or
+        the directory and validates the individual components via the
+        ComponentValidator.
+
+        Args:
+            data_element: The data element to validate.
+            data_element_ref: The reference definition (tag, type, required
+                flag) from the segment definition.
+            version: The syntax version of the message.
+            dir_name: Name of the message directory, if validation should be
+                directory-specific, otherwise None for the generic syntax.
+            header: The interchange header segment (UNB), needed for charset
+                validation.
+            una_seg: The UNA segment of the message, if present, otherwise
+                None.
+
+        Raises:
+            DataElementValidationError: If a simple element contains multiple
+                components although it must not, a required element is
+                missing, the corresponding element or composite definition
+                cannot be found, a required component of a composite
+                definition is missing, or a component violates its
+                definition (length/charset).
+        """
         if not data_element_ref.required and not data_element.components:
             return
 

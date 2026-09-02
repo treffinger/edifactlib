@@ -95,6 +95,7 @@ Older directories will follow.
 This project values transparency about which content was hand-written and which was created with AI assistance:
 
 - **Source code** under `src/` is mainly **hand-written**. Any AI-generated portions are explicitly **marked** as such.
+- **Exception: docstrings.** Docstrings under `src/` may be AI-generated and are not individually marked.
 - **Exception: the `tests` folder.** Test code is created with AI assistance.
 - Any AI-generated code within the `tests` folder is marked as such with a corresponding comment in the code.
 - If a file in the `tests` folder does not contain such a marker comment, its content was written manually.

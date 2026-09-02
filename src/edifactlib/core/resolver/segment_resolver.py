@@ -12,6 +12,23 @@ class SegmentResolver:
         self._directory = directory
 
     def resolve(self, segment: Segment, version: str, dir_name: str | None) -> None:
+        """Resolve the name of a segment and the names of its data elements.
+
+        Looks up the segment definition from the syntax or the directory and,
+        if found, sets the segment's name and delegates resolution of each
+        present data element occurrence to the DataElementResolver. If no
+        definition is found, the segment is left unchanged.
+
+        Args:
+            segment: The segment to resolve.
+            version: The syntax version of the message.
+            dir_name: Name of the message directory if resolution should be
+                directory-specific, otherwise None for the generic syntax.
+
+        Raises:
+            Does not raise any exception itself. A segment definition that
+            cannot be found is silently skipped; no name is set in that case.
+        """
         seg_def: SegmentDef | None = None
         if not dir_name:
             seg_def = self._syntax.get_segment(segment.tag, version)
