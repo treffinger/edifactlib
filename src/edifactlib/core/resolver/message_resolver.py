@@ -1,4 +1,5 @@
 from ..directory import Directory
+from ..exceptions import EdifactError
 from ..models.interchange import Message
 from ..syntax import Syntax
 from .segment_resolver import SegmentResolver
@@ -9,7 +10,14 @@ class MessageResolver:
         self._segment_resolver = SegmentResolver(syntax, directory)
 
     def resolve(self, message: Message, version: str) -> None:
-        msg_identifier = message.header.data_elements[1]
+        try:
+            msg_identifier = message.header.data_elements[1]
+        except IndexError:
+            raise EdifactError("The identifier of the message could not be read.")
+
+        if len(msg_identifier.components) < 3:
+            raise EdifactError("The identifier of the message could not be read.")
+
         dir_name = f"{msg_identifier.components[1].content}.{msg_identifier.components[2].content}"
         for segment in message.segments:
             if segment.tag == "UNS" or segment.tag == "TXT":
