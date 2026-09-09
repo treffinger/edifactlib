@@ -21,6 +21,9 @@ dev = [
   "black",
   "isort"
 ]
+docs = [
+  "sphinx"
+]
 
 [project.urls]
 source = "https://github.com/treffinger/edifactlib"
