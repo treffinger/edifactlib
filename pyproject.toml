@@ -22,7 +22,8 @@ dev = [
   "isort"
 ]
 docs = [
-  "sphinx"
+  "sphinx",
+  "sphinx-rtd-theme"
 ]
 
 [project.urls]
