@@ -1,17 +1,16 @@
-.. edifactlib documentation master file, created by
-   sphinx-quickstart on Wed Sep  9 16:38:29 2026.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 edifactlib documentation
 ========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
-
+edifactlib is a Python library for parsing, validating, and displaying EDIFACT interchanges.
+It also comes with a CLI tool that allows you to view formatted interchanges in the terminal.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   installation
+   quickstart
+   api/index
+   cli
+   supported_versions
+   development
