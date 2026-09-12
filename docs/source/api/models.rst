@@ -4,32 +4,32 @@ Models
 Interchange models
 ------------------
 
-.. autoclass:: edifactlib.core.models.interchange.Interchange
+.. autoclass:: edifactlib.Interchange
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.interchange.FunctionalGroup
+.. autoclass:: edifactlib.FunctionalGroup
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.interchange.Message
+.. autoclass:: edifactlib.Message
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.interchange.Segment
+.. autoclass:: edifactlib.Segment
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.interchange.DataElement
+.. autoclass:: edifactlib.DataElement
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.interchange.Component
+.. autoclass:: edifactlib.Component
    :members:
    :undoc-members:
    :show-inheritance:
@@ -37,27 +37,27 @@ Interchange models
 Syntax definition models
 ------------------------
 
-.. autoclass:: edifactlib.core.models.syntax.SegmentDef
+.. autoclass:: edifactlib.SegmentDef
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.syntax.ElementDef
+.. autoclass:: edifactlib.ElementDef
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.syntax.CompositeDef
+.. autoclass:: edifactlib.CompositeDef
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.syntax.DataElementRef
+.. autoclass:: edifactlib.DataElementRef
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: edifactlib.core.models.syntax.ComponentRef
+.. autoclass:: edifactlib.ComponentRef
    :members:
    :undoc-members:
    :show-inheritance:

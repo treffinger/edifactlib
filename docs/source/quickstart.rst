@@ -7,7 +7,7 @@ Using edifactlib as a library
 The main class ``Parser`` allows EDIFACT Interchanges to be parsed using the ``parse`` method.
 By default, the parser validates all messages.
 However, this behavior can also be disabled.
-The method returns an :class:`~edifactlib.core.models.interchange.Interchange` object, which can be populated with additional details by using the ``resolve`` method of the :class:`~edifactlib.InterchangeResolver` class.
+The method returns an :class:`~edifactlib.Interchange` object, which can be populated with additional details by using the ``resolve`` method of the :class:`~edifactlib.InterchangeResolver` class.
 These details include, for example, the official name and description of the elements.
 
 .. code-block:: python
