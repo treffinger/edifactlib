@@ -62,10 +62,10 @@ class BaseParser:
 
     def _extract_data_element(self, raw_data: str, position: int, data_elements: list[DataElement]) -> None:
         components: list[Component] = []
-        for content in self._split_respecting_release(raw_data, self._component_sep):
-            unescaped = self._unescape(content)
-            if content != "":
-                components.append(Component(content=unescaped))
+        if raw_data != "":
+            for content in self._split_respecting_release(raw_data, self._component_sep):
+                content = self._unescape(content)
+                components.append(Component(content=content if content != "" else None))
         data_elements.append(DataElement(components=components, position=position))
 
     def _create_interchange(self, segments: list[Segment]) -> Interchange:
