@@ -1,5 +1,5 @@
 from .edifact_error import EdifactError
 
 
-class CharsetValidationError(EdifactError):
+class DataElementError(EdifactError):
     pass

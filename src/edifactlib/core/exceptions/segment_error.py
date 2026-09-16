@@ -1,5 +1,5 @@
 from .edifact_error import EdifactError
 
 
-class InterchangeValidationError(EdifactError):
+class SegmentError(EdifactError):
     pass
