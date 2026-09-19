@@ -1,1 +1,1 @@
-from .error_location import ErrorLocation
+from .error_details import ErrorDetails
