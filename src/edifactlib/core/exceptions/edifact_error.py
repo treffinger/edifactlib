@@ -1,26 +1,32 @@
-from ..models import ErrorLocation
+from ..models import ErrorDetails
+from ..models.interchange import ServiceCharacters
 
 
 class EdifactError(Exception):
     code: str = "EDIFACT_ERROR"
 
-    def __init__(self, message: str, location: ErrorLocation | None = None) -> None:
+    def __init__(self, message: str, details: ErrorDetails | None = None) -> None:
         super().__init__(message)
         self.message = message
-        self.location = location if location is not None else ErrorLocation()
+        self.details = details if details is not None else ErrorDetails()
 
     def __str__(self) -> str:
-        sub_text = ""
-        if self.location.component:
-            sub_text = self.location.component.dump_raw()
-        elif self.location.data_element:
-            sub_text = self.location.data_element.dump_raw()
-        elif self.location.segment:
-            sub_text = self.location.segment.dump_raw()
+        if not self.details.interchange:
+            return self.message
 
-        message_text = ""
-        if self.location.message:
-            message_text = self.location.message.dump_raw()
-            message_text = message_text.replace(sub_text, f"\033[31m{sub_text}\033[0m")
+        service_chars = (
+            ServiceCharacters.from_una(self.details.interchange.una)
+            if self.details.interchange.una
+            else ServiceCharacters()
+        )
+        location = ""
+        if self.details.component:
+            location = self.details.component.dump_raw(service_chars)
+        elif self.details.data_element:
+            location = self.details.data_element.dump_raw(service_chars)
+        elif self.details.segment:
+            location = self.details.segment.dump_raw(service_chars)
 
-        return f"{self.message}\n\nFaulty part: {sub_text}\n\nMessage:\n\n{message_text}"
+        interchange_text = self.details.interchange.dump_raw()
+        interchange_text = interchange_text.replace(location, f"\033[31m{location}\033[0m")
+        return f"{self.message}\n\nFaulty part: \n\n{interchange_text}"
