@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel
 
-from .segment import Segment
+if TYPE_CHECKING:
+    from .segment import Segment
 
 
 class ServiceCharacters(BaseModel):

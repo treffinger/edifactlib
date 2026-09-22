@@ -1,5 +1,4 @@
 from ..models import ErrorDetails
-from ..models.interchange import ServiceCharacters
 
 
 class EdifactError(Exception):
@@ -14,19 +13,9 @@ class EdifactError(Exception):
         if not self.details.interchange:
             return self.message
 
-        service_chars = (
-            ServiceCharacters.from_una(self.details.interchange.una)
-            if self.details.interchange.una
-            else ServiceCharacters()
-        )
-        location = ""
-        if self.details.component:
-            location = self.details.component.dump_raw(service_chars)
-        elif self.details.data_element:
-            location = self.details.data_element.dump_raw(service_chars)
-        elif self.details.segment:
-            location = self.details.segment.dump_raw(service_chars)
-
-        interchange_text = self.details.interchange.dump_raw()
-        interchange_text = interchange_text.replace(location, f"\033[31m{location}\033[0m")
+        target = self.details.component or self.details.data_element or self.details.segment
+        interchange_text = self.details.interchange.dump_raw(None, target, self._red)
         return f"{self.message}\n\nFaulty part: \n\n{interchange_text}"
+
+    def _red(self, text: str) -> str:
+        return f"\033[31m{text}\033[0m"

@@ -1,18 +1,21 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, override
 
-from pydantic import BaseModel
+from .interchange_base_model import InterchangeBaseModel
 
 if TYPE_CHECKING:
     from .service_characters import ServiceCharacters
 
 
-class Component(BaseModel):
+class Component(InterchangeBaseModel):
     content: str | None
     name: str | None = None
 
-    def dump_raw(self, service_chars: ServiceCharacters) -> str:
+    @override
+    def dump_raw(
+        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+    ) -> str:
         if not self.content:
             return ""
 
@@ -22,4 +25,5 @@ class Component(BaseModel):
             service_chars.segment_terminator,
             service_chars.release_indicator,
         }
-        return "".join(f"{service_chars.release_indicator}{c}" if c in reserved else c for c in self.content)
+        raw = "".join(f"{service_chars.release_indicator}{c}" if c in reserved else c for c in self.content)
+        return self._apply_style(raw, target, style)
