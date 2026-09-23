@@ -1,5 +1,6 @@
 from .directory import Directory
 from .exceptions import *
+from .models import *
 from .models.interchange import *
 from .models.syntax import *
 from .parser import Parser
