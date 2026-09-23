@@ -42,7 +42,7 @@ class SegmentValidator:
             DataElementError: If a data element or component
                 violates its definition.
         """
-        seg_def = self._get_segment_def(segment.tag, dir_name, version)
+        seg_def = self._get_segment_def(segment, dir_name, version)
         by_position: dict[int, list[DataElement]] = {}
 
         for e in segment.data_elements:
@@ -80,14 +80,16 @@ class SegmentValidator:
                     e.details.segment = segment
                     raise
 
-    def _get_segment_def(self, tag: str, dir_name: str | None, version: str) -> SegmentDef:
+    def _get_segment_def(self, segment: Segment, dir_name: str | None, version: str) -> SegmentDef:
         seg_def: SegmentDef | None = None
         if not dir_name:
-            seg_def = self._syntax.get_segment(tag, version)
+            seg_def = self._syntax.get_segment(segment.tag, version)
         else:
-            seg_def = self._directory.get_segment(tag, dir_name)
+            seg_def = self._directory.get_segment(segment.tag, dir_name)
 
         if not seg_def:
-            raise SegmentError(f'The tag "{tag}" was not found in the directory.')
+            raise SegmentError(
+                f'The tag "{segment.tag}" was not found in the directory.', details=ErrorDetails(segment=segment)
+            )
 
         return seg_def
