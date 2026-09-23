@@ -1,11 +1,7 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Callable, override
+from typing import Callable, override
 
 from .interchange_base_model import InterchangeBaseModel
-
-if TYPE_CHECKING:
-    from .service_characters import ServiceCharacters
+from .service_characters import ServiceCharacters
 
 
 class Component(InterchangeBaseModel):
@@ -14,11 +10,15 @@ class Component(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
         if not self.content:
             return ""
 
+        service_chars = service_chars or ServiceCharacters()
         reserved = {
             service_chars.component_sep,
             service_chars.data_element_sep,

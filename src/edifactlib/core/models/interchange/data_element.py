@@ -1,12 +1,8 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Callable, override
+from typing import Callable, override
 
 from .component import Component
 from .interchange_base_model import InterchangeBaseModel
-
-if TYPE_CHECKING:
-    from .service_characters import ServiceCharacters
+from .service_characters import ServiceCharacters
 
 
 class DataElement(InterchangeBaseModel):
@@ -16,8 +12,12 @@ class DataElement(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
+        service_chars = service_chars or ServiceCharacters()
         raw = service_chars.component_sep.join(
             [component.dump_raw(service_chars, target, style) for component in self.components]
         )

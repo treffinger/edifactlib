@@ -13,8 +13,12 @@ class FunctionalGroup(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
+        service_chars = service_chars or ServiceCharacters()
         raw = f"{self.header.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}\n"
         raw += "".join([message.dump_raw(service_chars, target, style) for message in self.messages])
         raw += f"\n{self.trailer.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}"

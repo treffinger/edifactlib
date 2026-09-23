@@ -1,12 +1,8 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Callable, override
+from typing import Callable, override
 
 from .data_element import DataElement
 from .interchange_base_model import InterchangeBaseModel
-
-if TYPE_CHECKING:
-    from .service_characters import ServiceCharacters
+from .service_characters import ServiceCharacters
 
 
 class Segment(InterchangeBaseModel):
@@ -16,8 +12,12 @@ class Segment(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
+        service_chars = service_chars or ServiceCharacters()
         if self.tag == "UNA":
             return f"UNA{service_chars.component_sep}{service_chars.data_element_sep}{service_chars.decimal_notation}{service_chars.release_indicator} {service_chars.segment_terminator}"
 

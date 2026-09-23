@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Callable, override
 
 from .interchange_base_model import InterchangeBaseModel
@@ -14,8 +12,12 @@ class Message(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
+        service_chars = service_chars or ServiceCharacters()
         raw = f"{self.header.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}\n"
         raw += f"{service_chars.segment_terminator}\n".join(
             [segment.dump_raw(service_chars, target, style) for segment in self.segments]

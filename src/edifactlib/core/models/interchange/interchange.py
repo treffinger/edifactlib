@@ -16,7 +16,10 @@ class Interchange(InterchangeBaseModel):
 
     @override
     def dump_raw(
-        self, service_chars: ServiceCharacters | None, target: InterchangeBaseModel | None, style: Callable | None
+        self,
+        service_chars: ServiceCharacters | None = None,
+        target: InterchangeBaseModel | None = None,
+        style: Callable | None = None,
     ) -> str:
         service_chars = ServiceCharacters.from_una(self.una) if self.una else ServiceCharacters()
         raw = f"{self.una.dump_raw(service_chars, target, style)}\n" if self.una else ""
