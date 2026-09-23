@@ -21,7 +21,7 @@ class Interchange(InterchangeBaseModel):
         service_chars = ServiceCharacters.from_una(self.una) if self.una else ServiceCharacters()
         raw = f"{self.una.dump_raw(service_chars, target, style)}\n" if self.una else ""
         raw += f"{self.header.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}\n"
-        raw += "".join([fg.dump_raw(service_chars, target, style) for fg in self.functional_groups])
-        raw += "".join([message.dump_raw(service_chars, target, style) for message in self.messages])
+        raw += "\n".join([fg.dump_raw(service_chars, target, style) for fg in self.functional_groups])
+        raw += "\n".join([message.dump_raw(service_chars, target, style) for message in self.messages])
         raw += f"\n{self.trailer.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}"
         return self._apply_style(raw, target, style)
