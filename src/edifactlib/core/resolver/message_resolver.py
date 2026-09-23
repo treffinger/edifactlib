@@ -1,5 +1,5 @@
 from ..directory import Directory
-from ..exceptions import EdifactError
+from ..exceptions import MessageError
 from ..models.interchange import Message
 from ..syntax import Syntax
 from .segment_resolver import SegmentResolver
@@ -22,16 +22,16 @@ class MessageResolver:
             version: The syntax version of the message.
 
         Raises:
-            EdifactError: If the message identifier cannot be read from the
+            MessageError: If the message identifier cannot be read from the
                 message header.
         """
         try:
             msg_identifier = message.header.data_elements[1]
         except IndexError:
-            raise EdifactError("The identifier of the message could not be read.")
+            raise MessageError("The identifier of the message could not be read.")
 
         if len(msg_identifier.components) < 3:
-            raise EdifactError("The identifier of the message could not be read.")
+            raise MessageError("The identifier of the message could not be read.")
 
         dir_name = f"{msg_identifier.components[1].content}.{msg_identifier.components[2].content}"
         for segment in message.segments:

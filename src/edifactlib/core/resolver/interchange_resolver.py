@@ -1,5 +1,5 @@
 from ..directory import Directory
-from ..exceptions import EdifactError
+from ..exceptions import InterchangeError
 from ..models.interchange import Interchange, Segment
 from ..syntax import Syntax
 from .message_resolver import MessageResolver
@@ -25,7 +25,7 @@ class InterchangeResolver:
                 be enriched with human-readable names.
 
         Raises:
-            EdifactError: If the syntax version cannot be read from the
+            InterchangeError: If the syntax version cannot be read from the
                 interchange header.
         """
         version = self._get_version(interchange.header)
@@ -43,9 +43,9 @@ class InterchangeResolver:
         try:
             version = header.data_elements[0].components[1].content
         except IndexError:
-            raise EdifactError("The syntax version of the interchange could not be read.")
+            raise InterchangeError("The syntax version of the interchange could not be read.")
 
         if not version:
-            raise EdifactError("The syntax version of the interchange could not be read.")
+            raise InterchangeError("The syntax version of the interchange could not be read.")
 
         return version
