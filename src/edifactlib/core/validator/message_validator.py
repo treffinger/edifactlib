@@ -1,5 +1,6 @@
 from ..directory import Directory
-from ..exceptions import MessageValidationError
+from ..exceptions import MessageError
+from ..models import ErrorDetails
 from ..models.interchange import Message, Segment
 from ..syntax import Syntax
 from .segment_validator import SegmentValidator
@@ -27,13 +28,13 @@ class MessageValidator:
                 None.
 
         Raises:
-            MessageValidationError: If the trailer does not contain a segment
+            MessageError: If the trailer does not contain a segment
                 count, the segment count is not numeric, does not match the
                 actual number of segments, or the reference number of header
                 and trailer does not match.
-            SegmentValidationError: If a segment of the message cannot be
+            SegmentError: If a segment of the message cannot be
                 found or violates its definition.
-            DataElementValidationError: If a data element or component of a
+            DataElementError: If a data element or component of a
                 segment of the message is invalid.
         """
         self._validate_segment_count(message)
@@ -48,21 +49,31 @@ class MessageValidator:
                 self._segment_validator.validate(segment, version, dir_name, header, una_seg)
 
     def _validate_segment_count(self, message: Message) -> None:
-        number_segments = message.trailer.data_elements[0].components[0].content
-        if not number_segments:
-            raise MessageValidationError("The message could not be validated. Invalid message trailer.")
+        segment_comp = message.trailer.data_elements[0].components[0]
+        if not segment_comp.content:
+            raise MessageError(
+                "The message could not be validated. Invalid message trailer.",
+                details=ErrorDetails(component=segment_comp),
+            )
 
         try:
-            number_segments = int(number_segments)
+            number_segments = int(segment_comp.content)
         except:
-            raise MessageValidationError(f"Unable to validate the message. A non-numeric segment count was specified")
+            raise MessageError(
+                f"Unable to validate the message. A non-numeric segment count was specified",
+                details=ErrorDetails(component=segment_comp),
+            )
 
         # +2 to include header and trailer segment
         if len(message.segments) + 2 != number_segments:
-            raise MessageValidationError(
-                f"Unable to validate the message. Segment count does not match. Expected count: {number_segments}, actual count: {len(message.segments) + 2}"
+            raise MessageError(
+                f"Unable to validate the message. Segment count does not match. Expected count: {number_segments}, actual count: {len(message.segments) + 2}",
+                details=ErrorDetails(component=segment_comp),
             )
 
     def _validate_reference_number(self, header: Segment, trailer: Segment) -> None:
         if trailer.data_elements[1].components[0].content != header.data_elements[0].components[0].content:
-            raise MessageValidationError("Unable to validate the message. Invalid reference number provided.")
+            raise MessageError(
+                "Unable to validate the message. Invalid reference number provided.",
+                details=ErrorDetails(component=trailer.data_elements[1].components[0]),
+            )

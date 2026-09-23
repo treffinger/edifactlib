@@ -1,5 +1,6 @@
 from ..directory import Directory
-from ..exceptions import DataElementValidationError
+from ..exceptions import DataElementError, EdifactError
+from ..models import ErrorDetails
 from ..models.interchange import DataElement, Segment
 from ..models.syntax import CompositeDef, DataElementRef, ElementDef
 from ..syntax import Syntax
@@ -43,7 +44,7 @@ class DataElementValidator:
                 None.
 
         Raises:
-            DataElementValidationError: If a simple element contains multiple
+            DataElementError: If a simple element contains multiple
                 components although it must not, a required element is
                 missing, the corresponding element or composite definition
                 cannot be found, a required component of a composite
@@ -68,12 +69,16 @@ class DataElementValidator:
         una_seg: Segment | None,
     ) -> None:
         if len(data_element.components) > 1:
-            raise DataElementValidationError(
-                f"The data element {data_element_ref.tag} is not a composite element, but it contains multiple values."
+            raise DataElementError(
+                f"The data element {data_element_ref.tag} is not a composite element, but it contains multiple values.",
+                details=ErrorDetails(data_element=data_element),
             )
 
         if not data_element.components[0].content and data_element_ref.required:
-            raise DataElementValidationError(f"The data element {data_element_ref.tag} is required but is missing.")
+            raise DataElementError(
+                f"The data element {data_element_ref.tag} is required but is missing.",
+                details=ErrorDetails(data_element=data_element),
+            )
 
         element_def: ElementDef | None = None
         if not dir_name:
@@ -82,9 +87,18 @@ class DataElementValidator:
             element_def = self._directory.get_element(data_element_ref.tag, dir_name)
 
         if not element_def:
-            raise DataElementValidationError(f"The data element {data_element_ref.tag} could not be found.")
+            raise DataElementError(
+                f"The data element {data_element_ref.tag} could not be found.",
+                details=ErrorDetails(data_element=data_element),
+            )
 
-        self._component_validator.validate(data_element.components[0], element_def, header, una_seg)
+        try:
+            self._component_validator.validate(
+                data_element.components[0], data_element_ref.required, element_def, header, una_seg
+            )
+        except EdifactError as e:
+            e.details.data_element = data_element
+            raise
 
     def _validate_edcd(
         self,
@@ -102,13 +116,17 @@ class DataElementValidator:
             composite_def = self._directory.get_composite(data_element_ref.tag, dir_name)
 
         if not composite_def:
-            raise DataElementValidationError(f"The composite data element {data_element_ref.tag} could not be found.")
+            raise DataElementError(
+                f"The composite data element {data_element_ref.tag} could not be found.",
+                details=ErrorDetails(data_element=data_element),
+            )
 
         for i, component_ref in enumerate(composite_def.components):
             if i >= len(data_element.components):
                 if component_ref.required:
-                    raise DataElementValidationError(
-                        f'A component in the data element "{data_element_ref.tag}" is missing.'
+                    raise DataElementError(
+                        f'A component in the data element "{data_element_ref.tag}" is missing.',
+                        details=ErrorDetails(data_element=data_element),
                     )
                 continue
 
@@ -119,6 +137,15 @@ class DataElementValidator:
                 element_def = self._directory.get_element(component_ref.tag, dir_name)
 
             if not element_def:
-                raise DataElementValidationError(f"The data element {component_ref.tag} could not be found.")
+                raise DataElementError(
+                    f"The data element {component_ref.tag} could not be found.",
+                    details=ErrorDetails(data_element=data_element),
+                )
 
-            self._component_validator.validate(data_element.components[i], element_def, header, una_seg)
+            try:
+                self._component_validator.validate(
+                    data_element.components[i], component_ref.required, element_def, header, una_seg
+                )
+            except EdifactError as e:
+                e.details.data_element = data_element
+                raise

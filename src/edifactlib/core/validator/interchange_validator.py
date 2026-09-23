@@ -1,5 +1,6 @@
 from ..directory import Directory
-from ..exceptions import InterchangeValidationError
+from ..exceptions import EdifactError, InterchangeError
+from ..models import ErrorDetails
 from ..models.interchange import Interchange, Segment
 from ..syntax import Syntax
 from .charset_level import ALLOWED_CHARSETS
@@ -26,35 +27,39 @@ class InterchangeValidator:
             interchange: The interchange to validate.
 
         Raises:
-            InterchangeValidationError: If the header or trailer does not
+            InterchangeError: If the header or trailer does not
                 have the expected tag (UNB/UNZ), violates its definition, the
                 control reference of header and trailer does not match,
                 neither messages nor functional groups are present, both
                 messages and functional groups are present at the same time,
                 the syntax version cannot be read, or the specified charset
                 level is not allowed for the version.
-            MessageValidationError: If a contained message is invalid.
-            SegmentValidationError: If a segment inside the header, trailer,
+            MessageError: If a contained message is invalid.
+            SegmentError: If a segment inside the header, trailer,
                 or a message cannot be found or violates its definition.
-            DataElementValidationError: If a data element or component
+            DataElementError: If a data element or component
                 inside the header, trailer, or a message is invalid.
         """
-        version = self._get_version(interchange.header)
-        self._validate_interchange_header(interchange.header, version, interchange.una)
-        self._validate_interchange_trailer(interchange.trailer, version, interchange.header, interchange.una)
-        self._validate_structure(interchange)
-        self._validate_charset_level(interchange.header)
+        try:
+            version = self._get_version(interchange.header)
+            self._validate_interchange_header(interchange.header, version, interchange.una)
+            self._validate_interchange_trailer(interchange.trailer, version, interchange.header, interchange.una)
+            self._validate_structure(interchange)
+            self._validate_charset_level(interchange.header)
 
-        for msg in interchange.messages:
-            self._message_validator.validate(msg, version, interchange.header, interchange.una)
-
-        for fg in interchange.functional_groups:
-            for msg in fg.messages:
+            for msg in interchange.messages:
                 self._message_validator.validate(msg, version, interchange.header, interchange.una)
+
+            for fg in interchange.functional_groups:
+                for msg in fg.messages:
+                    self._message_validator.validate(msg, version, interchange.header, interchange.una)
+        except EdifactError as e:
+            e.details.interchange = interchange
+            raise
 
     def _validate_interchange_header(self, segment: Segment, version: str, una_seg: Segment | None) -> None:
         if segment.tag != "UNB":
-            raise InterchangeValidationError("Invalid interchange header provided.")
+            raise InterchangeError("Invalid interchange header provided.", details=ErrorDetails(segment=segment))
 
         self._segment_validator.validate(segment, version, None, segment, una_seg)
 
@@ -62,18 +67,21 @@ class InterchangeValidator:
         self, segment: Segment, version: str, header: Segment, una_seg: Segment | None
     ) -> None:
         if segment.tag != "UNZ":
-            raise InterchangeValidationError("Invalid interchange trailer provided.")
+            raise InterchangeError("Invalid interchange trailer provided.", details=ErrorDetails(segment=segment))
 
         self._segment_validator.validate(segment, version, None, header, una_seg)
         if segment.data_elements[1].components[0].content != header.data_elements[4].components[0].content:
-            raise InterchangeValidationError("Interchange control does not match.")
+            raise InterchangeError(
+                "Interchange control does not match.",
+                details=ErrorDetails(component=segment.data_elements[1].components[0]),
+            )
 
     def _validate_structure(self, interchange: Interchange) -> None:
         if not interchange.messages and not interchange.functional_groups:
-            raise InterchangeValidationError("The interchange does not contain any messages or functional groups.")
+            raise InterchangeError("The interchange does not contain any messages or functional groups.")
 
         if len(interchange.messages) > 0 and len(interchange.functional_groups) > 0:
-            raise InterchangeValidationError(
+            raise InterchangeError(
                 "The interchange contains both messages outside of functional groups and functional groups."
             )
 
@@ -82,17 +90,22 @@ class InterchangeValidator:
         level = header.data_elements[0].components[0].content
         charsets = ALLOWED_CHARSETS.get(syntax_version, [])
         if level not in charsets:
-            raise InterchangeValidationError(
-                "The charset specified by the interchange does not match the allowed charsets for this version."
+            raise InterchangeError(
+                "The charset specified by the interchange does not match the allowed charsets for this version.",
+                details=ErrorDetails(component=header.data_elements[0].components[0]),
             )
 
     def _get_version(self, header: Segment) -> str:
         try:
             version = header.data_elements[0].components[1].content
         except IndexError:
-            raise InterchangeValidationError("The syntax version of the interchange could not be read.")
+            raise InterchangeError(
+                "The syntax version of the interchange could not be read.", details=ErrorDetails(segment=header)
+            )
 
         if not version:
-            raise InterchangeValidationError("The syntax version of the interchange could not be read.")
+            raise InterchangeError(
+                "The syntax version of the interchange could not be read.", details=ErrorDetails(segment=header)
+            )
 
         return version

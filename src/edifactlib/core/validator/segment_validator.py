@@ -1,5 +1,6 @@
 from ..directory import Directory
-from ..exceptions import SegmentValidationError
+from ..exceptions import EdifactError, SegmentError
+from ..models import ErrorDetails
 from ..models.interchange import DataElement, Segment
 from ..models.syntax import SegmentDef
 from ..syntax import Syntax
@@ -34,11 +35,11 @@ class SegmentValidator:
                 None.
 
         Raises:
-            SegmentValidationError: If the segment definition for the tag
+            SegmentError: If the segment definition for the tag
                 cannot be found, a required data element is missing, a data
                 element occurs more often than allowed, or a required data
                 element is present but its content is empty.
-            DataElementValidationError: If a data element or component
+            DataElementError: If a data element or component
                 violates its definition.
         """
         seg_def = self._get_segment_def(segment.tag, dir_name, version)
@@ -51,24 +52,33 @@ class SegmentValidator:
             occurrences = by_position.get(i)
 
             if data_element_ref.required and not occurrences:
-                raise SegmentValidationError(
-                    f'The data element "{data_element_ref.tag}" is a required element, but was not specified.'
+                raise SegmentError(
+                    f'The data element "{data_element_ref.tag}" is a required element, but was not specified.',
+                    details=ErrorDetails(segment=segment),
                 )
 
             if not occurrences:
                 continue
 
             if len(occurrences) > data_element_ref.max_repeat:
-                raise SegmentValidationError(
-                    f'The data element "{data_element_ref.tag}" occurs too many times. Allowed repetitions: {data_element_ref.max_repeat}, actual repetitions: {len(occurrences)}'
+                raise SegmentError(
+                    f'The data element "{data_element_ref.tag}" occurs too many times. Allowed repetitions: {data_element_ref.max_repeat}, actual repetitions: {len(occurrences)}',
+                    details=ErrorDetails(segment=segment),
                 )
 
             for occurrence in occurrences:
                 if data_element_ref.required and not occurrence.components:
-                    raise SegmentValidationError(
-                        f"The data element {data_element_ref.tag} is required, but its entire content is empty"
+                    raise SegmentError(
+                        f"The data element {data_element_ref.tag} is required, but its entire content is empty.",
+                        details=ErrorDetails(segment=segment),
                     )
-                self._data_element_validator.validate(occurrence, data_element_ref, version, dir_name, header, una_seg)
+                try:
+                    self._data_element_validator.validate(
+                        occurrence, data_element_ref, version, dir_name, header, una_seg
+                    )
+                except EdifactError as e:
+                    e.details.segment = segment
+                    raise
 
     def _get_segment_def(self, tag: str, dir_name: str | None, version: str) -> SegmentDef:
         seg_def: SegmentDef | None = None
@@ -78,6 +88,6 @@ class SegmentValidator:
             seg_def = self._directory.get_segment(tag, dir_name)
 
         if not seg_def:
-            raise SegmentValidationError(f'The tag "{tag}" was not found in the directory.')
+            raise SegmentError(f'The tag "{tag}" was not found in the directory.')
 
         return seg_def
