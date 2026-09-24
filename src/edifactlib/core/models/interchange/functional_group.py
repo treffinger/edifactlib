@@ -20,6 +20,6 @@ class FunctionalGroup(InterchangeBaseModel):
     ) -> str:
         service_chars = service_chars or ServiceCharacters()
         raw = f"{self.header.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}\n"
-        raw += "".join([message.dump_raw(service_chars, target, style) for message in self.messages])
+        raw += "\n".join([message.dump_raw(service_chars, target, style) for message in self.messages])
         raw += f"\n{self.trailer.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}"
         return self._apply_style(raw, target, style)
