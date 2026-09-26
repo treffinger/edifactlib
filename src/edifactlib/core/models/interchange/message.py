@@ -18,9 +18,9 @@ class Message(InterchangeBaseModel):
         style: Callable | None = None,
     ) -> str:
         service_chars = service_chars or ServiceCharacters()
-        raw = f"{self.header.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}\n"
-        raw += f"{service_chars.segment_terminator}\n".join(
-            [segment.dump_raw(service_chars, target, style) for segment in self.segments]
+        lines = [self.header, *self.segments, self.trailer]
+        raw = "\n".join(
+            [f"{segment.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}" for segment in lines]
         )
-        raw += f"{service_chars.segment_terminator}\n{self.trailer.dump_raw(service_chars, target, style)}{service_chars.segment_terminator}"
+
         return self._apply_style(raw, target, style)
