@@ -27,6 +27,8 @@ class InterchangeResolver:
         Raises:
             InterchangeError: If the syntax version cannot be read from the
                 interchange header.
+            MessageError: If the identifier of a contained message cannot
+                be read from its header.
         """
         version = self._get_version(interchange.header)
         self._segment_resolver.resolve(interchange.header, version, None)

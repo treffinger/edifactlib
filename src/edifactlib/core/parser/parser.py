@@ -19,7 +19,9 @@ class Parser:
 
         First determines the syntax version from the separators and the UNB
         segment and selects the matching parser accordingly. Optionally
-        validates the resulting interchange afterwards.
+        validates the resulting interchange afterwards. Validation errors
+        carry :class:`~edifactlib.ErrorDetails` pointing to the faulty part
+        of the parsed interchange.
 
         Args:
             edifact_msg: The raw EDIFACT message to parse.
@@ -33,13 +35,13 @@ class Parser:
             ParsingError: If the syntax version cannot be determined, an
                 unsupported version is present, the UNA segment is invalid,
                 or the message cannot otherwise be parsed.
-            InterchangeValidationError: If validate=True and the interchange
+            InterchangeError: If validate=True and the interchange
                 header/trailer or the interchange structure is invalid.
-            MessageValidationError: If validate=True and a contained message
+            MessageError: If validate=True and a contained message
                 is invalid (e.g. wrong segment count or reference number).
-            SegmentValidationError: If validate=True and a segment cannot be
+            SegmentError: If validate=True and a segment cannot be
                 found in the directory/syntax or violates its definition.
-            DataElementValidationError: If validate=True and a data element
+            DataElementError: If validate=True and a data element
                 or component is invalid (length, charset, missing required
                 value, etc.).
         """
