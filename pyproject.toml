@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edifactlib"
-version = "0.5.0"
+version = "0.6.0"
 description = "A Python library and CLI tool for parsing, validating, and displaying UN/EDIFACT interchanges."
 license = "AGPL-3.0-only"
 readme = "README.md"
@@ -14,6 +14,15 @@ dependencies = [
   "rich"
 ]
 requires-python = ">=3.12"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries",
+  "Operating System :: OS Independent"
+]
 
 [project.optional-dependencies]
 dev = [
@@ -28,6 +37,7 @@ docs = [
 
 [project.urls]
 source = "https://github.com/treffinger/edifactlib"
+documentation = "https://edifactlib.readthedocs.io"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/edifactlib"]
