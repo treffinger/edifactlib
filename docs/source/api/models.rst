@@ -34,6 +34,24 @@ Interchange models
    :undoc-members:
    :show-inheritance:
 
+.. autoclass:: edifactlib.InterchangeBaseModel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: edifactlib.ServiceCharacters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Error models
+------------
+
+.. autoclass:: edifactlib.ErrorDetails
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Syntax definition models
 ------------------------
 
