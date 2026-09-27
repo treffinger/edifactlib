@@ -6,7 +6,7 @@
 import pytest
 
 from edifactlib.core.directory import Directory
-from edifactlib.core.exceptions import EdifactError, SegmentValidationError
+from edifactlib.core.exceptions import EdifactError, SegmentError
 from edifactlib.core.models.interchange import Component, DataElement, Segment
 from edifactlib.core.syntax import Syntax
 from edifactlib.core.validator.segment_validator import SegmentValidator
@@ -33,7 +33,7 @@ def test_valid_segment_passes(validator):
 def test_missing_required_data_element_raises(validator):
     nad = Segment(tag="NAD", data_elements=[])
 
-    with pytest.raises(SegmentValidationError):
+    with pytest.raises(SegmentError):
         validator.validate(nad, "3", "D.24A", _header(), None)
 
 
@@ -46,7 +46,7 @@ def test_data_element_exceeding_max_repeat_raises(validator):
         ],
     )
 
-    with pytest.raises(SegmentValidationError):
+    with pytest.raises(SegmentError):
         validator.validate(nad, "3", "D.24A", _header(), None)
 
 
@@ -73,8 +73,10 @@ def test_dir_name_none_uses_syntax_catalog_instead_of_directory(validator):
 def test_unknown_segment_tag(validator):
     unknown = Segment(tag="ZZZ", data_elements=[])
 
-    with pytest.raises(SegmentValidationError):
+    with pytest.raises(SegmentError) as exc_info:
         validator.validate(unknown, "3", "D.24A", _header(), None)
+
+    assert exc_info.value.details.segment is unknown
 
 
 def test_required_data_element_present_but_empty(validator):

@@ -6,7 +6,7 @@
 import pytest
 
 from edifactlib.core.directory import Directory
-from edifactlib.core.exceptions import DataElementValidationError
+from edifactlib.core.exceptions import DataElementError
 from edifactlib.core.models.interchange import Component, DataElement, Segment
 from edifactlib.core.models.syntax import DataElementRef
 from edifactlib.core.syntax import Syntax
@@ -43,8 +43,15 @@ def test_eded_required_but_missing_content_raises(validator):
     ref = DataElementRef(tag="1004", type="EDED", required=True, max_repeat=1)
     data_element = DataElement(components=[Component(content=None)], position=1)
 
-    with pytest.raises(DataElementValidationError):
+    with pytest.raises(DataElementError):
         validator.validate(data_element, ref, "3", "D.24A", _header(), None)
+
+
+def test_eded_optional_but_present_and_empty_content_passes(validator):
+    ref = DataElementRef(tag="1004", type="EDED", required=False, max_repeat=1)
+    data_element = DataElement(components=[Component(content=None)], position=1)
+
+    validator.validate(data_element, ref, "3", "D.24A", _header(), None)
 
 
 def test_eded_with_multiple_components_raises():
@@ -52,7 +59,7 @@ def test_eded_with_multiple_components_raises():
     ref = DataElementRef(tag="1004", type="EDED", required=False, max_repeat=1)
     data_element = DataElement(components=[Component(content="A"), Component(content="B")], position=1)
 
-    with pytest.raises(DataElementValidationError):
+    with pytest.raises(DataElementError):
         validator.validate(data_element, ref, "3", "D.24A", _header(), None)
 
 
@@ -67,5 +74,16 @@ def test_edcd_missing_required_subcomponent_raises(validator):
     ref = DataElementRef(tag="C507", type="EDCD", required=True, max_repeat=1)
     data_element = DataElement(components=[], position=0)
 
-    with pytest.raises(DataElementValidationError):
+    with pytest.raises(DataElementError):
+        validator.validate(data_element, ref, "3", "D.24A", _header(), None)
+
+
+def test_edcd_present_but_empty_required_subcomponent_raises(validator):
+    # C507 component 2005 (qualifier) is required; here it is present but empty ("DTM+:20260704:102'").
+    ref = DataElementRef(tag="C507", type="EDCD", required=True, max_repeat=1)
+    data_element = DataElement(
+        components=[Component(content=None), Component(content="20260704"), Component(content="102")], position=0
+    )
+
+    with pytest.raises(DataElementError):
         validator.validate(data_element, ref, "3", "D.24A", _header(), None)

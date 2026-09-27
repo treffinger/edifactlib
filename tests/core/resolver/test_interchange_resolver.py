@@ -5,7 +5,7 @@
 
 import pytest
 
-from edifactlib.core.exceptions import EdifactError
+from edifactlib.core.exceptions import InterchangeError
 from edifactlib.core.parser.base_parser import BaseParser
 from edifactlib.core.resolver.interchange_resolver import InterchangeResolver
 
@@ -41,9 +41,9 @@ def test_resolves_messages_within_functional_groups(resolver):
     assert fg_message.segments[0].name == "Beginning of message"
 
 
-def test_missing_syntax_version_raises_edifact_error(resolver, valid_edifact_message):
+def test_missing_syntax_version_raises_interchange_error(resolver, valid_edifact_message):
     interchange = BaseParser().parse(valid_edifact_message)
     interchange.header.data_elements[0].components[1].content = None
 
-    with pytest.raises(EdifactError):
+    with pytest.raises(InterchangeError):
         resolver.resolve(interchange)

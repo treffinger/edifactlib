@@ -6,7 +6,7 @@
 import pytest
 
 from edifactlib import Parser
-from edifactlib.core.exceptions import MessageValidationError, ParsingError
+from edifactlib.core.exceptions import MessageError, ParsingError
 
 
 def test_parse_valid_message_returns_interchange(valid_edifact_message):
@@ -70,7 +70,7 @@ def test_validate_false_skips_validation(valid_edifact_message):
 def test_validate_true_by_default_raises_on_invalid_structure(valid_edifact_message):
     bad_count_msg = valid_edifact_message.replace("UNT+11+1'", "UNT+99+1'")
 
-    with pytest.raises(MessageValidationError):
+    with pytest.raises(MessageError):
         Parser().parse(bad_count_msg)
 
 

@@ -30,7 +30,7 @@ def test_release_indicator_escapes_delimiters_without_splitting():
     assert last_element.components[0].content == "Escaped+plus and'quote"
 
 
-def test_empty_components_are_dropped():
+def test_empty_data_elements_have_no_components():
     msg = "UNB+x'UNH+1+ORDERS:D:24A:UN'FTX+AAA+++hello'UNT+2+1'UNZ+1+x'"
 
     interchange = BaseParser().parse(msg)
@@ -39,6 +39,16 @@ def test_empty_components_are_dropped():
     # positions 1 and 2 are empty ("+++") and should contain no components at all
     assert ftx.data_elements[1].components == []
     assert ftx.data_elements[2].components == []
+
+
+def test_empty_components_within_non_empty_data_element_are_kept_as_none():
+    msg = "UNB+x'UNH+1+ORDERS:D:24A:UN'DTM+:20260704:102'NAD+BY+123::9'UNT+3+1'UNZ+1+x'"
+
+    interchange = BaseParser().parse(msg)
+
+    dtm, nad = interchange.messages[0].segments
+    assert [c.content for c in dtm.data_elements[0].components] == [None, "20260704", "102"]
+    assert [c.content for c in nad.data_elements[1].components] == ["123", None, "9"]
 
 
 def test_unh_segments_are_grouped_into_messages():

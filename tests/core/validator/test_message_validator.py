@@ -6,7 +6,7 @@
 import pytest
 
 from edifactlib.core.directory import Directory
-from edifactlib.core.exceptions import MessageValidationError
+from edifactlib.core.exceptions import MessageError
 from edifactlib.core.models.interchange import Component, DataElement, Message, Segment
 from edifactlib.core.parser.base_parser import BaseParser
 from edifactlib.core.syntax import Syntax
@@ -33,7 +33,7 @@ def test_segment_count_mismatch_raises(validator, parsed):
     message = parsed.messages[0]
     message.trailer.data_elements[0].components[0].content = "99"
 
-    with pytest.raises(MessageValidationError):
+    with pytest.raises(MessageError):
         validator.validate(message, "3", parsed.header, parsed.una)
 
 
@@ -41,7 +41,7 @@ def test_missing_segment_count_raises(validator, parsed):
     message = parsed.messages[0]
     message.trailer.data_elements[0].components[0].content = ""
 
-    with pytest.raises(MessageValidationError):
+    with pytest.raises(MessageError):
         validator.validate(message, "3", parsed.header, parsed.una)
 
 
@@ -49,7 +49,7 @@ def test_reference_number_mismatch_raises(validator, parsed):
     message = parsed.messages[0]
     message.trailer.data_elements[1].components[0].content = "999"
 
-    with pytest.raises(MessageValidationError):
+    with pytest.raises(MessageError):
         validator.validate(message, "3", parsed.header, parsed.una)
 
 
@@ -57,7 +57,7 @@ def test_non_numeric_segment_count(validator, parsed):
     message = parsed.messages[0]
     message.trailer.data_elements[0].components[0].content = "ABC"
 
-    with pytest.raises(MessageValidationError):
+    with pytest.raises(MessageError):
         validator.validate(message, "3", parsed.header, parsed.una)
 
 

@@ -6,7 +6,7 @@
 import pytest
 
 from edifactlib.core.directory import Directory
-from edifactlib.core.exceptions import EdifactError
+from edifactlib.core.exceptions import MessageError
 from edifactlib.core.models.interchange import Component, DataElement, Message, Segment
 from edifactlib.core.parser.base_parser import BaseParser
 from edifactlib.core.resolver.message_resolver import MessageResolver
@@ -61,7 +61,7 @@ def test_uns_segment_is_resolved_against_syntax_not_directory(resolver):
     assert uns.name == "Section Control"
 
 
-def test_raises_edifact_error_when_header_has_no_message_identifier(resolver):
+def test_raises_message_error_when_header_has_no_message_identifier(resolver):
     header = Segment(
         tag="UNH",
         data_elements=[DataElement(components=[Component(content="1")], position=0)],
@@ -75,11 +75,11 @@ def test_raises_edifact_error_when_header_has_no_message_identifier(resolver):
     )
     message = Message(header=header, trailer=trailer, segments=[])
 
-    with pytest.raises(EdifactError):
+    with pytest.raises(MessageError):
         resolver.resolve(message, "3")
 
 
-def test_raises_edifact_error_when_message_identifier_has_too_few_components(resolver):
+def test_raises_message_error_when_message_identifier_has_too_few_components(resolver):
     header = Segment(
         tag="UNH",
         data_elements=[
@@ -99,5 +99,5 @@ def test_raises_edifact_error_when_message_identifier_has_too_few_components(res
     )
     message = Message(header=header, trailer=trailer, segments=[])
 
-    with pytest.raises(EdifactError):
+    with pytest.raises(MessageError):
         resolver.resolve(message, "3")
